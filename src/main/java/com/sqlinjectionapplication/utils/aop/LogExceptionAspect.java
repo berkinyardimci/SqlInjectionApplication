@@ -1,5 +1,6 @@
 package com.sqlinjectionapplication.utils.aop;
 
+import com.sqlinjectionapplication.exception.LoggableException;
 import com.sqlinjectionapplication.exception.PasswordNotValidException;
 import com.sqlinjectionapplication.exception.UserNameNotValidException;
 import com.sqlinjectionapplication.interceptor.RequestInterceptor;
@@ -37,7 +38,7 @@ public class LogExceptionAspect {
     public void clearQuery() {
         queryThreadLocal.remove();
     }
-
+/*
     @AfterThrowing(pointcut = "execution(* com.sqlinjectionapplication.service.UserService.*(..))", throwing = "ex")
     public void logError(Exception ex) {
         HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();
@@ -64,4 +65,25 @@ public class LogExceptionAspect {
         }
         this.logProducer.sendLoginLog(logModel);
     }
+ */
+@AfterThrowing(pointcut = "execution(* com.sqlinjectionapplication.service.UserService.*(..))", throwing = "ex")
+public void logError(Exception ex) {
+    HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();
+
+    if (ex instanceof LoggableException) {
+        LoggableException loggableException = (LoggableException) ex;
+        String query = getQuery();
+        String logMessage = loggableException.getExMessage();
+
+        logger.error(logMessage + " : {}", query);
+
+        LogModel logModel = LogModel.builder()
+                .query(String.format("%s : {%s}", logMessage, query))
+                .httpMethod(currentRequest.getMethod())
+                .httpUri(currentRequest.getRequestURI())
+                .httpUrl(currentRequest.getRequestURL().toString())
+                .build();
+        this.logProducer.sendLoginLog(logModel);
+    }
+}
 }
