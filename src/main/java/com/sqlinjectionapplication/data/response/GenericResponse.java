@@ -16,15 +16,8 @@ public class GenericResponse <T>{
     private String message;
     private LocalDateTime localTime;
     private T data;
-    private Map<Object,Object> errorInfoMap;
+    //private Map<Object,Object> errorInfoMap;
 
-    public GenericResponse(HttpStatus httpStatus, Integer statusCode, String message, LocalDateTime localTime, Map<Object, Object> errorInfoMap) {
-        this.httpStatus = httpStatus;
-        this.statusCode = statusCode;
-        this.message = message;
-        this.localTime = localTime;
-        this.errorInfoMap = errorInfoMap;
-    }
 
     public GenericResponse(HttpStatus httpStatus, Integer statusCode, String message, LocalDateTime localTime, T data) {
         this.httpStatus = httpStatus;
@@ -40,4 +33,5 @@ public class GenericResponse <T>{
         this.message = message;
         this.localTime = localTime;
     }
+
 }

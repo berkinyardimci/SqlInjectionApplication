@@ -1,21 +1,15 @@
 server:
-  port: 9596
+  port: 8000
 
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/beam_db
+    username: postgres
+    password: 1357
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
-    show-sql: true
-
-  h2:
-    console:
-      enabled: true
+    hibernate:
+      ddl-auto: create
 
   rabbitmq:
     host: localhost

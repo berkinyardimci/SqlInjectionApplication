@@ -19,4 +19,9 @@ public class LogModel implements Serializable {
 
     @Builder.Default
     private LocalDate createdDate = LocalDate.now();
+
+    private String httpMethod;
+    private String httpUri;
+    private String httpUrl;
+
 }

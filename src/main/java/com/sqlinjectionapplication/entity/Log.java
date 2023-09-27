@@ -19,4 +19,7 @@ public class Log {
     private Long id;
     private String message;
     private LocalDate createdDate;
+    private String httpMethod;
+    private String httpUri;
+    private String httpUrl;
 }

@@ -36,27 +36,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return getGenericResponse(message, HttpStatus.NOT_FOUND);
     }
 
-    private Map<Object, Object> createErrorMap(){
-        HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();
-        Map<Object, Object> errorMap = new HashMap<>();
-
-        if(Objects.nonNull(currentRequest)){
-            errorMap.put("HTTP Method", currentRequest.getMethod());
-            errorMap.put("Endpoint", currentRequest.getHttpServletMapping().getPattern());
-            errorMap.put("HTTP URI", currentRequest.getRequestURI());
-            errorMap.put("HTTP URL", currentRequest.getRequestURL());
-        }
-        return errorMap;
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<GenericResponse<?>> handledUserNotFoundException(UserAlreadyExistException ex){
+        String message = ex.getExMessage();
+        return getGenericResponse(message, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<GenericResponse<?>> getGenericResponse(String ex, HttpStatus httpStatus){
-        Map<Object, Object> errorMap = createErrorMap();
         GenericResponse<?> response =new GenericResponse(
                 httpStatus,
                 httpStatus.value(),
                 ex,
-                LocalDateTime.now(),
-                errorMap
+                LocalDateTime.now()
         );
         return ResponseEntity.status(httpStatus).body(response);
     }

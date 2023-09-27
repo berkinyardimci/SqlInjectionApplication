@@ -12,6 +12,7 @@ public class UserAlreadyExistException extends RuntimeException{
     }
 
     public String getExMessage(){
-        return this.username + " " + ErrorMessage.USERNAME_NOT_FOUND;
+        return this.username + " " + ErrorMessage.USERNAME_ALREADY_EXIST;
+
     }
 }

@@ -60,7 +60,7 @@ public class UserService {
             userRepository.save(user);
             return new CreateUserResponse(user.getId(), user.getUsername());
         }
-        throw new UserAlreadyExistException(ErrorMessage.USERNAME_ALREADY_EXIST);
+        throw new UserAlreadyExistException(request.username());
     }
 
     private Optional<User> findByUserNameAndPassword(String username, String password) {
