@@ -4,6 +4,7 @@ import com.sqlinjectionapplication.data.request.CreateUserRequest;
 import com.sqlinjectionapplication.data.request.LoginUserRequest;
 import com.sqlinjectionapplication.exception.PasswordNotValidException;
 import com.sqlinjectionapplication.exception.UserNameNotValidException;
+import com.sqlinjectionapplication.utils.constant.ErrorMessage;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
@@ -19,17 +20,17 @@ public class SQLInjectionAspect {
     @After("execution(* com.sqlinjectionapplication.service.UserService.createUser(..)) && args(request)")
     public void beforeLogin(CreateUserRequest request) {
         if (!isValidUsernameRegex(request.username())) {
-            throw new UserNameNotValidException("Username is not valid!");
+            throw new UserNameNotValidException(request.username());
         } else if (!isValidPasswordRegex(request.password())) {
-            throw new PasswordNotValidException("Password is not valid!");
+            throw new PasswordNotValidException(request.password());
         }
     }
     @After("execution(* com.sqlinjectionapplication.service.UserService.login(..)) && args(request)")
     public void beforeLogin(LoginUserRequest request) {
         if (!isValidUsernameRegex(request.username())) {
-            throw new UserNameNotValidException("Username is not valid!");
+            throw new UserNameNotValidException(request.username());
         } else if (!isValidPasswordRegex(request.password())) {
-            throw new PasswordNotValidException("Password is not valid!");
+            throw new PasswordNotValidException(request.password());
         }
     }
 

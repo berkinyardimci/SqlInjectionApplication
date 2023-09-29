@@ -8,11 +8,9 @@ import com.sqlinjectionapplication.data.response.LoginUserResponse;
 import com.sqlinjectionapplication.entity.User;
 import com.sqlinjectionapplication.exception.UserAlreadyExistException;
 import com.sqlinjectionapplication.exception.UserNotFoundException;
-import com.sqlinjectionapplication.rabbitMq.producer.LogProducer;
 import com.sqlinjectionapplication.repository.UserRepository;
 import com.sqlinjectionapplication.utils.aop.LogExceptionAspect;
 import com.sqlinjectionapplication.utils.constant.ConstantQuery;
-import com.sqlinjectionapplication.utils.constant.ErrorMessage;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -26,18 +24,15 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     @PersistenceContext
     private EntityManager entityManager;
     private final UserRepository userRepository;
 
     private final LogExceptionAspect handleExceptionAspect;
-    private final LogProducer logProducer;
 
-    public UserService(UserRepository userRepository, LogExceptionAspect handleExceptionAspect, LogProducer logProducer) {
+    public UserService(UserRepository userRepository, LogExceptionAspect handleExceptionAspect) {
         this.userRepository = userRepository;
         this.handleExceptionAspect = handleExceptionAspect;
-        this.logProducer = logProducer;
     }
 
     public LoginUserResponse login(LoginUserRequest request) {
@@ -74,9 +69,9 @@ public class UserService {
         for (Object param : params) {
             query.setParameter(paramIndex++, param);
         }
-        List<Object[]> rows = query.getResultList();
-        if (!rows.isEmpty()) {
-            Object[] row = rows.get(0);
+        List<Object[]> result = query.getResultList();
+        if (!(Objects.isNull(result) || result.isEmpty())) {
+            Object[] row = result.get(0);
             Long id = (Long) row[0];
             String usernames = (String) row[1];
 
@@ -94,18 +89,18 @@ public class UserService {
         if (params.length == 0) {
             return query;
         }
-        String filledQuery = query;
+        String queryString = query;
         for (Object param : params) {
             String paramValue = param != null ? param.toString() : "null";
-            filledQuery = filledQuery.replaceFirst("\\?", "'" + paramValue + "'");
+            queryString = queryString.replaceFirst("\\?", "'" + paramValue + "'");
         }
-        return filledQuery;
+        return queryString;
     }
 
     public LoginUserResponse queryWithSqlInjection(LoginUserRequest request) {
         String[] params = {request.username(), request.password()};
         String formattedQuery = String.format(ConstantQuery.FIND_USER_BY_USERNAME_PASSWORD, params);
-        handleExceptionAspect.setQuery(formattedQuery);
+        //handleExceptionAspect.setQuery(formattedQuery);
         Query nativeQuery = entityManager.createNativeQuery(formattedQuery);
         List<Object[]> result = nativeQuery.getResultList();
         if (Objects.isNull(result) || result.isEmpty()) {

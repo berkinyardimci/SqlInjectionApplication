@@ -7,6 +7,7 @@ import com.sqlinjectionapplication.data.response.GenericResponse;
 import com.sqlinjectionapplication.data.response.LoginUserResponse;
 import com.sqlinjectionapplication.service.UserService;
 import com.sqlinjectionapplication.utils.constant.SuccessMessage;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

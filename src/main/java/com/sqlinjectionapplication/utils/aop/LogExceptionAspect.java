@@ -38,34 +38,7 @@ public class LogExceptionAspect {
     public void clearQuery() {
         queryThreadLocal.remove();
     }
-/*
-    @AfterThrowing(pointcut = "execution(* com.sqlinjectionapplication.service.UserService.*(..))", throwing = "ex")
-    public void logError(Exception ex) {
-        HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();
-        LogModel logModel;
 
-        if (ex instanceof PasswordNotValidException) {
-            logger.error("Danger Password query : {}", getQuery());
-            logModel = LogModel.builder()
-                    .query(String.format("Danger Password query : {%s}", getQuery()))
-                    .httpMethod(currentRequest.getMethod())
-                    .httpUri(currentRequest.getRequestURI())
-                    .httpUrl(currentRequest.getRequestURL().toString())
-                    .build();
-        } else if (ex instanceof UserNameNotValidException) {
-            logger.error("Danger Username query : {}", getQuery());
-            logModel = LogModel.builder()
-                    .query(String.format("Danger Username query : {%s}", getQuery()))
-                    .httpMethod(currentRequest.getMethod())
-                    .httpUri(currentRequest.getRequestURI())
-                    .httpUrl(currentRequest.getRequestURL().toString())
-                    .build();
-        } else {
-            return;
-        }
-        this.logProducer.sendLoginLog(logModel);
-    }
- */
 @AfterThrowing(pointcut = "execution(* com.sqlinjectionapplication.service.UserService.*(..))", throwing = "ex")
 public void logError(Exception ex) {
     HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();
@@ -75,7 +48,7 @@ public void logError(Exception ex) {
         String query = getQuery();
         String logMessage = loggableException.getExMessage();
 
-        logger.error(logMessage + " : {}", query);
+        //logger.error(logMessage + " : {}", query);
 
         LogModel logModel = LogModel.builder()
                 .query(String.format("%s : {%s}", logMessage, query))
@@ -83,7 +56,7 @@ public void logError(Exception ex) {
                 .httpUri(currentRequest.getRequestURI())
                 .httpUrl(currentRequest.getRequestURL().toString())
                 .build();
-        this.logProducer.sendLoginLog(logModel);
+        this.logProducer.sendLog(logModel);
     }
 }
 }

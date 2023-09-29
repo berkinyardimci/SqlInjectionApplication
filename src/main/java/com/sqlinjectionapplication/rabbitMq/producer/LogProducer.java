@@ -15,7 +15,7 @@ public class LogProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendLoginLog(LogModel model){
+    public void sendLog(LogModel model){
         rabbitTemplate.convertAndSend(QueueConstants.LOG_QUEUE_NAME, model);
     }
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,7 +15,6 @@ public class GenericResponse <T>{
     private String message;
     private LocalDateTime localTime;
     private T data;
-    //private Map<Object,Object> errorInfoMap;
 
 
     public GenericResponse(HttpStatus httpStatus, Integer statusCode, String message, LocalDateTime localTime, T data) {

@@ -14,31 +14,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(UserNameNotValidException.class)
-    public ResponseEntity<GenericResponse<?>> handleUsernameNotValidException(UserNameNotValidException ex){
+    public ResponseEntity<GenericResponse> handleUsernameNotValidException(UserNameNotValidException ex){
         String message = ex.getExMessage();
         return getGenericResponse(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(PasswordNotValidException.class)
-    public ResponseEntity<GenericResponse<?>> handlePasswordNotValidException(PasswordNotValidException ex){
+    public ResponseEntity<GenericResponse> handlePasswordNotValidException(PasswordNotValidException ex){
         String message = ex.getExMessage();
         return getGenericResponse(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<GenericResponse<?>> handledUserNotFoundException(UserNotFoundException ex){
+    public ResponseEntity<GenericResponse> handledUserNotFoundException(UserNotFoundException ex){
         String message = ex.getExMessage();
         return getGenericResponse(message, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<GenericResponse<?>> handledUserNotFoundException(UserAlreadyExistException ex){
+    public ResponseEntity<GenericResponse> handledUserNotFoundException(UserAlreadyExistException ex){
         String message = ex.getExMessage();
         return getGenericResponse(message, HttpStatus.BAD_REQUEST);
     }
 
-    private ResponseEntity<GenericResponse<?>> getGenericResponse(String ex, HttpStatus httpStatus){
-        GenericResponse<?> response =new GenericResponse(
+    private ResponseEntity<GenericResponse> getGenericResponse(String ex, HttpStatus httpStatus){
+        GenericResponse response =new GenericResponse(
                 httpStatus,
                 httpStatus.value(),
                 ex,

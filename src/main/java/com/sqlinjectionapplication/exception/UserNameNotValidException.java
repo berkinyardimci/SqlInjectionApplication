@@ -5,16 +5,16 @@ import com.sqlinjectionapplication.utils.constant.ErrorMessage;
 
 public class UserNameNotValidException extends LoggableException{
 
-    private String password;
+    private String username;
 
-    public UserNameNotValidException(String password) {
-        super(password);
-        this.password = password;
+    public UserNameNotValidException(String username) {
+        super(username);
+        this.username = username;
     }
 
     @Override
     public String getExMessage() {
-        return this.password + " " + ErrorMessage.PASSWORD_NOT_VALID;
+        return this.username + " " + ErrorMessage.USERNAME_NOT_VALID;
     }
 
 }
